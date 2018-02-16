@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import $ from 'jquery';
 
 import './css/pure-min.css';
 import './css/side-menu-old-ie.css';
@@ -9,17 +10,20 @@ class App extends Component {
   constructor(){
     super();
     this.state = {
-      lista: [{        
-        nome: "Miguel",
-        email: "Miguel@email.com",
-        senha: "123456"
-      }]
+      lista: [{}]
     }
   }
 
+  componentDidMount(){    
+    $.ajax({
+      url: "http://cdc-react.herokuapp.com/api/autores",
+      dataType: "json",
+      success:((resposta) =>{this.setState({lista:resposta})}).bind(this)
+    });    
+  }
 
-  render() {
-    return (
+  render() {    
+    return (      
       <div id="layout">      
       <a href="#menu" id="menuLink" className="menu-link">          
           <span></span>
@@ -75,7 +79,7 @@ class App extends Component {
                   {
                     this.state.lista.map(function(autor){
                       return(
-                        <tr>
+                        <tr key ={autor.id} >
                           <td>{autor.nome}</td>
                           <td>{autor.email}</td>
                         </tr>
